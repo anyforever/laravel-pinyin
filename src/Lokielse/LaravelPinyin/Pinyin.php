@@ -1,6 +1,7 @@
 <?php
 namespace Lokielse\LaravelPinyin;
 
+use Illuminate\Support\Str;
 use Lokielse\LaravelPinyin\Lib\Pinyin as PinyinLib;
 
 class Pinyin
@@ -141,14 +142,14 @@ class Pinyin
         $string = implode('-', $components);
         $string = strtolower($string);
         if ($policy == self::POLICY_CAMEL) {
-            $string = camel_case($string);
+            $string = Str::camel($string);
         } elseif ($policy == self::POLICY_UNDERSCORE) {
-            $string = camel_case($string);
-            $string = snake_case($string, '_');
+            $string = Str::camel($string);
+            $string = Str::snake($string, '_');
         } elseif ($policy == self::POLICY_HYPHEN) {
-            $string = snake_case($string, '-');
+            $string = Str::snake($string, '-');
         } elseif ($policy == self::POLICY_STUDLY) {
-            $string = studly_case($string);
+            $string = Str::studly($string);
         } elseif ($policy == self::POLICY_BLANK) {
             $string = preg_replace('#\-#', ' ', $string);
         } elseif ($policy == self::POLICY_SHRINK) {
