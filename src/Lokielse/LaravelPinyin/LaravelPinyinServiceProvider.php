@@ -1,4 +1,5 @@
-<?php namespace Lokielse\LaravelPinyin;
+<?php
+namespace Lokielse\LaravelPinyin;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -10,7 +11,7 @@ class LaravelPinyinServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = false;
+    protected $defer = true;
 
     /**
      * Bootstrap the application events.
@@ -19,9 +20,7 @@ class LaravelPinyinServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (method_exists($this, 'package')) {
-            $this->package('lokielse/laravel-pinyin');
-        } 
+        //
     }
 
     /**
@@ -31,11 +30,11 @@ class LaravelPinyinServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['laravel-pinyin'] = $this->app->share(
-            function ($app) {
-                return new Pinyin;
-            }
-        );
+        $this->app->singleton(Pinyin::class, function ($app) {
+            return new Pinyin();
+        });
+
+        $this->app->alias(Pinyin::class, 'laravel-pinyin');
     }
 
     /**
@@ -45,6 +44,6 @@ class LaravelPinyinServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array();
+        return [Pinyin::class, 'laravel-pinyin'];
     }
 }
